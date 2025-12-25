@@ -1,12 +1,43 @@
 # \[Katalon Studio\] Hacking New Report to insert Test Step Description
 
-This is a small Katalon Studio project for demonstration purpose. This project proposes a solution to the issue raised at a topic in Katalon Community:
+This is a small [Katalon Studio](https://katalon.com/) project for demonstration purpose. This project proposes a solution to the issue raised at a topic in Katalon Community:
 
 - [How to display steps description into new HTML report?](https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/)
 
 ## Problem to solve
 
-<https://github.com/kazurayam/KS_HackingNewReportForStepDescription/Scripts/>
+### What is the **Test Step Description**
+
+I need to start with explaining the background knowledge. Here is a sample Katalon Studio Test Case script:
+
+![TESTCASE LOGIN](images/TESTCASE_LOGIN.png)
+
+Please find that the Manual View has a column titled `Description` for each test steps. For example, the 4th statement is attached with a description "**click the button of Make Appointment**"
+
+In the Script view, you can see the same Test Case script in Groovy language.
+
+- link:https://github.com/kazurayam/KS\_HackingNewReportForStepDescription/Scripts/Main Test Cases/TC1\_Verify Successful Login/Script1482850539026.groovy\[\]
+
+The 4th statement is serialized as this:
+
+    'click the button of Make Appointment'
+    WebUI.click(findTestObject('Page_CuraHomepage/btn_MakeAppointment'))
+
+Please note that the `Description` of test case step is serialized as a string literal prepended to each command statements.
+
+### With v9.7.6, the HTML report showed Test Step Descriptions
+
+I ran a Test Suite which includes the above Test Case script using the Katalon Studio v9.7.6, which generated a HTML report like this:
+
+<figure>
+<img src="https://kazurayam.github.io/KS_HackingNewReportForStepDescription/images/old_report_view.png" alt="old report view" />
+</figure>
+
+Katalon Studio [v10.2.0](https://docs.katalon.com/katalon-studio/release-notes/katalon-studio-release-notes-version-10.x#version-1020) introduced a new test suite HTML report template.
+
+In this report, you can see a string `Description: click the button of Make Appointment`.
+
+I could look into the HTML source of the report using the Chrome’s Dev Tool. Here is the HTML fragment of that portion:
 
     <div id="s1-t1-k4" class="keyword">
       <div class="element-header" onclick="toggleKeyword('s1-t1-k4')" title="click(findTestObject(&amp;quot;Page_CuraHomepage/btn_MakeAppointment&amp;quot;))">
