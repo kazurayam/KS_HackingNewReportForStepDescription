@@ -114,8 +114,86 @@ The following is the code fragmen portion which renders the test step of `click(
       </div><div class="MuiBox-root css-26yrm988"><div class="styled-al7jglz2 MuiStack-root css-mjtibxsc"></div></div></div></div>
     </div>
 
-In order to solve this defect, the source of Katalon Studio need to be changed. Only Katalon can develop it. As long as they put lower profile for this issue, the problem would remain.
+In order to solve this defect, the source of Katalon Studio need to be changed. Only Katalon can develop it. As long as they put lower primority for this issue in their backlog, the problem would remain unresolved.
 
 ## My solution
 
 ## How I developed the trick
+
+### Study on v9.7.6
+
+I studied the source code of Katalon Studio v9.7.6 to find out how the HTML report generates the portion of Test Step Description.
+
+I found [9.7.6/resources/source/com.kms.katalon.core/com/kms/katalon/core/reporting/template/hml\_content.txt](https://github.com/kazurayam/KS_HackingNewReportForStepDescription/docs/katalon-studio-sources/versions/9.7.6/resources/source/com.kms.katalon.core/com/kms/katalon/core/reporting/template/hml_content.txt) contains the relevant fragment at the line#239..259.
+
+    <script type="text/x-jquery-tmpl" id="testTemplate">
+      <div id="${id}" class="test">
+        <div class="element-header closed" onclick="toggleTest('${id}')" title="{{html fullName}}">
+          <span class="${status.toLowerCase()}">TEST CASE: </span>
+          <span class="name">{{html name}}</span>
+          <a class="expand" title="Expand this test fully"
+             href="javascript:expandAllChildren('${id}')"
+             onclick="stopPropagation(event)">Expand All</a>
+        </div>
+        <div class="children">
+          <table class="metadata">
+            <tr>
+              <th>Full Name:</th>
+              <td>{{html fullName}}</td>
+            </tr>
+            {{if doc()}}
+            <tr>
+              <th>Description:</th>
+              <td class="doc">{{html doc()}}</td>
+            </tr>
+            {{/if}}
+
+Well, the following frament is especially interesting.
+
+            {{if doc()}}
+            <tr>
+              <th>Description:</th>
+              <td class="doc">{{html doc()}}</td>
+            </tr>
+            {{/if}}
+
+I need to learn the grammer of [jQuote Template](https://github.com/codepb/jquery-template); I need to find out what `{{if docs()}}` means, I need to find out what `{{html doc()}}` does.
+
+### Study on v10.4.2
+
+In the `{KATALON_STUDIO_INSTALLATION_DIRECTORY}/configuration/resources/html` directory, we can find the template files used by Katalon Studio v10.2+ to compile the new HTML reports.
+
+    ~/10.4.2/resources/html [1] $ ls -la | sed 's/kazuakiurayama//g'
+    total 2590
+    drwxr-xr-x  10  staff        320 2025-12-25 22:29 .
+    drwxr-xr-x   5  staff        160 2025-12-25 22:29 ..
+    -rwxr-xr-x   1  staff    1209163 2025-12-25 22:29 TestSuiteCollectionTemplate.html
+    -rwxr-xr-x   1  staff    1220331 2025-12-25 22:29 TestSuiteTemplate.html
+    -rwxr-xr-x   1  staff       6064 2025-12-25 22:29 html_collection_frame_template.txt
+    -rwxr-xr-x   1  staff      11420 2025-12-25 22:29 html_collection_index_template.txt
+    -rwxr-xr-x   1  staff      12775 2025-12-25 22:29 html_content.txt
+    -rwxr-xr-x   1  staff     186433 2025-12-25 22:29 html_template.txt
+    -rwxr-xr-x   1  staff       1022 2025-12-25 22:29 html_vars.txt
+    -rwxr-xr-x   1  staff       4371 2025-12-25 22:29 variables.txt
+
+I tried to find and grep those files with the pattern string "TEST STEP". I found a mach in the `html_content.txt` file as follows:
+
+    <script type="text/x-jquery-tmpl" id="keywordTemplate">
+      <div id="${id}" class="keyword">
+        <div class="element-header closed" onclick="toggleKeyword('${id}')" title="${name}">
+          <span class="${status.toLowerCase()}">TEST STEP: </span>
+          {{if doc()}}
+          <span>Description: <font>{{html doc()}}</font></span>
+          {{else}}
+          <span style="color:#808080; font-style: italic">{{html name}}</span>
+          <span style="color:#808080; font-style: italic" class="arg">{{html arguments}}</span>
+          {{/if}}
+        </div>
+
+1.  Well, the `resources/html/html_content` file of v10.4.2 seems to be just the same as the `resources/sources/com/kms/katalon/core/reporting/template/html_content.txt`.
+
+This finding suggested to me that `{{if doc()}}` was evaluated differently in v9.7.6 and v10.4.2. In v9.7.6, the `doc()` was evalutated true; therefore the `Description: xxxxxx` was rendered. But in v10.4.2, the `doc()` was evaluated false; therefore the `Description: xxxxxx` was NOT rendered.
+
+So, I should find out what the `doc()` means, and find out the reason of the evaluation difference.
+
+### What is `doc()` ?
