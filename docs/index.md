@@ -33,9 +33,7 @@ I ran a Test Suite which includes the above Test Case script using the Katalon S
 <img src="https://kazurayam.github.io/KS_HackingNewReportForStepDescription/images/old_report_view.png" alt="old report view" />
 </figure>
 
-Katalon Studio [v10.2.0](https://docs.katalon.com/katalon-studio/release-notes/katalon-studio-release-notes-version-10.x#version-1020) introduced a new test suite HTML report template.
-
-In this report, you can see a string `Description: click the button of Make Appointment`.
+In this report, you can see a string "**Description: click the button of Make Appointment**" which was transfered from the Test Case script source into the report.
 
 I could look into the HTML source of the report using the Chrome’s Dev Tool. Here is the HTML fragment of that portion:
 
@@ -69,6 +67,20 @@ I could look into the HTML source of the report using the Chrome’s Dev Tool. H
         </table>
       </div>
     </div>
+
+### Problem: the new HTML report does not show the Test Step descriptions
+
+Katalon Studio [v10.2.0](https://docs.katalon.com/katalon-studio/release-notes/katalon-studio-release-notes-version-10.x#version-1020) introduced a new test suite HTML report template, which does not show the Test Step descriptions at all. The original poster of the topic in the Katalon Community [argued](https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/15) insisted that this is serious for him and requested a fix A.S.A.P.
+
+Let me show you an evidence of the defect.
+
+I ran the same Test Suite using Katalon Studio v10.4.2 which generated the following HTML report.
+
+<figure>
+<img src="https://kazurayam.github.io/KS_HackingNewReportForStepDescription/images/new_report_view.png" alt="new report view" />
+</figure>
+
+The following is the portion which renders the test step of `click(findTestObject("Page_CuraHomepage/btn_MakeAppointment"))`, which obviously lacks the Description.
 
     <div data-step-id="e8815d25-8461-4d84-ad55-1729307549a1" class="styled-2ypqurjb css-n9psmrl3">
       <div class="styled-0zpbks79 css-2ahub4jp">
