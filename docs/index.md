@@ -1,6 +1,3 @@
-- Table of contents
-{:toc}
-
 # \[Katalon Studio\] Hacking New Report to insert Test Step Description
 
 This is a small [Katalon Studio](https://katalon.com/) project for demonstration purpose. This project proposes a solution to the issue raised at a topic in Katalon Community:
@@ -197,3 +194,7 @@ This finding suggested to me that `{{if doc()}}` was evaluated differently in v9
 So, I should find out what the `doc()` means, and find out the reason of the evaluation difference.
 
 ### What is `doc()` ?
+
+## Aha!
+
+See <https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/16>

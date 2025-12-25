@@ -185,3 +185,8 @@ So, I should find out what the `doc()` means, and find out the reason of the eva
 
 === What is `doc()` ?
 
+== Aha!
+
+See https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/16
+
+
