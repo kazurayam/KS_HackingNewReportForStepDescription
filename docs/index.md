@@ -1,3 +1,6 @@
+- Table of contents
+{:toc}
+
 # \[Katalon Studio\] Hacking New Report to insert Test Step Description
 
 This is a small [Katalon Studio](https://katalon.com/) project for demonstration purpose. This project proposes a solution to the issue raised at a topic in Katalon Community:
@@ -68,9 +71,9 @@ I could look into the HTML source of the report using the Chrome’s Dev Tool. H
       </div>
     </div>
 
-### Problem: the new HTML report does not show the Test Step descriptions
+### the new HTML report does not show the Test Step descriptions
 
-Katalon Studio [v10.2.0](https://docs.katalon.com/katalon-studio/release-notes/katalon-studio-release-notes-version-10.x#version-1020) introduced a new test suite HTML report template, which does not show the Test Step descriptions at all. The original poster of the topic in the Katalon Community [argued](https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/15) insisted that this is serious for him and requested a fix A.S.A.P.
+Katalon Studio [v10.2.0](https://docs.katalon.com/katalon-studio/release-notes/katalon-studio-release-notes-version-10.x#version-1020) introduced a new test suite HTML report template, which **does not show the Test Step descriptions at all**. The original poster of the topic in the Katalon Community [argued](https://forum.katalon.com/t/how-to-display-steps-description-into-new-html-report/173818/15) that this is serious for him and requested a fix A.S.A.P.
 
 Let me show you an evidence of the defect.
 
@@ -80,7 +83,7 @@ I ran the same Test Suite using Katalon Studio v10.4.2 which generated the follo
 <img src="https://kazurayam.github.io/KS_HackingNewReportForStepDescription/images/new_report_view.png" alt="new report view" />
 </figure>
 
-The following is the portion which renders the test step of `click(findTestObject("Page_CuraHomepage/btn_MakeAppointment"))`, which obviously lacks the Description.
+The following is the code fragmen portion which renders the test step of `click(findTestObject("Page_CuraHomepage/btn_MakeAppointment"))`. The `Description` is not rendered here obviously.
 
     <div data-step-id="e8815d25-8461-4d84-ad55-1729307549a1" class="styled-2ypqurjb css-n9psmrl3">
       <div class="styled-0zpbks79 css-2ahub4jp">
@@ -110,3 +113,9 @@ The following is the portion which renders the test step of `click(findTestObjec
         </table>
       </div><div class="MuiBox-root css-26yrm988"><div class="styled-al7jglz2 MuiStack-root css-mjtibxsc"></div></div></div></div>
     </div>
+
+In order to solve this defect, the source of Katalon Studio need to be changed. Only Katalon can develop it. As long as they put lower profile for this issue, the problem would remain.
+
+## My solution
+
+## How I developed the trick
